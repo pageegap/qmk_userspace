@@ -17,6 +17,42 @@
 
 #include QMK_KEYBOARD_H
 
+
+#include "keymap_us_international.h"
+#include "sendstring_us_international.h"
+
+
+enum custom_layers {
+     _QWERTY,
+     _LOWER,
+     _RAISE,
+     _MOVE
+};
+
+enum custom_keycodes {
+    NEWLINE = SAFE_RANGE,
+    PRINT_SCR
+};
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case NEWLINE:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LCTL("e"));
+                register_code(KC_ENT);
+                unregister_code(KC_ENT);
+            }
+            return false;
+    }
+
+    return true;
+}
+
+// Tap Dance declarations
+enum {
+    TD_ESC_CAPS,
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [0] = LAYOUT_split_3x6_3(
