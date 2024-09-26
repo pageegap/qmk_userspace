@@ -53,7 +53,7 @@ enum {
     TD_SHOW_SCREEN,
 };
 
-const uint16_t PROGMEM test_combo1[] = {KC_CAPS, KC_DEL, COMBO_END};
+const uint16_t PROGMEM test_combo1[] = {QK_GESC, KC_DEL, COMBO_END};
 
 combo_t key_combos[] = {
     COMBO(test_combo1, LCTL(LGUI(KC_Q))), // keycodes with modifiers are possible too!
