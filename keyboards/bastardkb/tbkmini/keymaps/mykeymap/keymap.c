@@ -50,10 +50,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // Tap Dance declarations1234567890             
 enum {
-    TD_ESC_CAPS,
+    TD_SHOW_SCREEN,
 };
 
-const uint16_t PROGMEM test_combo1[] = {QK_GESC, KC_DEL, COMBO_END};
+const uint16_t PROGMEM test_combo1[] = {KC_CAPS, KC_DEL, COMBO_END};
 
 combo_t key_combos[] = {
     COMBO(test_combo1, LCTL(LGUI(KC_Q))), // keycodes with modifiers are possible too!
@@ -62,12 +62,12 @@ combo_t key_combos[] = {
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
     // Tap once for Escape, twice for Caps Lock
-    [TD_ESC_CAPS] = ACTION_TAP_DANCE_DOUBLE(LCTL(KC_UP), LGUI(KC_UP)),
+    [TD_SHOW_SCREEN] = ACTION_TAP_DANCE_DOUBLE(LCTL(KC_UP), LGUI(KC_UP)),
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-    [_QWERTY] = LAYOUT_split_3x6_3(
+    [_QWERTY] = LAYOUT_split_3x6_3(                     
         //,-----------------------------------------------------.                    ,-----------------------------------------------------.
             KC_CAPS,   KC_Q,   KC_W,   KC_E,     KC_R,    KC_T,                          KC_Y,   KC_U,    KC_I,    KC_O,     KC_P,  KC_ENT,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -75,7 +75,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
           KC_LSFT, LT(_LOWER, KC_Z), KC_X, KC_C, KC_V,  LT(_MOVE, KC_B),                 KC_N,   KC_M,   KC_COMM, KC_DOT,  LT(_RAISE, KC_SLSH), KC_RSFT,
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-        KC_LGUI, KC_SPC, TD(TD_ESC_CAPS),                                                       KC_TAB, KC_SPC, KC_RALT
+        TD(TD_SHOW_SCREEN), KC_SPC, QK_GESC,                                                       KC_DEL, KC_SPC,  KC_TAB                  
         //`--------------------------'  `--------------------------'
 
         ),
@@ -88,7 +88,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
             _______, _______,  KC_LGUI, _______, _______, _______,                      _______,  KC_7,   KC_8,   KC_9,   KC_0,  _______,
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                            _______, KC_TAB, _______, _______, _______, KC_DEL
+                            _______, KC_TAB, _______, _______, _______, _______
         //`--------------------------'  `--------------------------'
         ),
 
@@ -98,9 +98,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
          _______, _______, KC_AT,  KC_LPRN, KC_RPRN, KC_TILD,                          KC_EXLM ,KC_EQL, KC_PLUS, KC_MINUS, _______, _______,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        _______, _______, KC_CIRC, KC_LBRC, KC_RBRC, KC_DLR,                           _______, KC_PIPE,  _______, _______, _______, _______,
+        _______, _______, KC_CIRC, KC_LBRC, KC_RBRC, KC_DLR,                           _______, KC_PIPE,  _______, KC_LGUI, _______, _______,
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-        _______, _______, _______,                   KC_TAB, _______, _______
+        _______, _______, _______,                   _______, KC_TAB, _______
         //`--------------------------'  `--------------------------'
         ),
 
