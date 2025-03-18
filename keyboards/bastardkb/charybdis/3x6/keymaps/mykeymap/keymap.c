@@ -79,7 +79,7 @@ const uint16_t PROGMEM ent_combo[] = {KC_M, KC_COMM, COMBO_END};
 combo_t key_combos[] = {
     COMBO(lockscr_combo, LCTL(LGUI(KC_Q))),
     COMBO(printscreen, SCMD(KC_5)),
-    COMBO(esc_combo, QK_GESC),
+    COMBO(esc_combo, KC_ESC),
     COMBO(ent_combo, KC_ENT)
 };
 
@@ -100,7 +100,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LSFT, LT(LAYER_LOWER, KC_Z), KC_X, KC_C, KC_V,  LT(LAYER_POINTER, KC_B),   KC_N,   KC_M,   KC_COMM, KC_DOT,  LT(LAYER_RAISE, KC_SLSH), KC_RSFT,
      //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-     LSFT_T(QK_GESC) , LT(LAYER_POINTER, KC_BTN1),  TD(TD_SHOW_SCREEN),                 KC_DEL, RSFT_T(KC_SPC)
+     LSFT_T(KC_ESC) , LT(LAYER_POINTER, KC_BTN1),  TD(TD_SHOW_SCREEN),                 KC_DEL, RSFT_T(KC_SPC)
      //                             `--------------------------'                   `--------------------------'
   ),
 
