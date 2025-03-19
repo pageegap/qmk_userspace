@@ -71,7 +71,7 @@ enum {
     TD_SHOW_SCREEN
 };
 
-const uint16_t PROGMEM lockscr_combo[] = {QK_GESC, KC_DEL, COMBO_END};
+const uint16_t PROGMEM lockscr_combo[] = {KC_CAPS, KC_ENT, COMBO_END};
 const uint16_t PROGMEM printscreen[] = { KC_G, KC_H, COMBO_END};
 const uint16_t PROGMEM esc_combo[] = {KC_U, KC_I, COMBO_END};
 const uint16_t PROGMEM ent_combo[] = {KC_M, KC_COMM, COMBO_END};
@@ -105,7 +105,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [LAYER_LOWER] = LAYOUT(
-//   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
 //,-----------------------------------------------------.                    ,-----------------------------------------------------.
             RGB_MOD, RGB_TOG, RGB_VAI, RGB_VAD, _______, _______,                      _______, KC_1,   KC_2,   KC_3,  _______,  _______,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -119,15 +118,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [LAYER_RAISE] = LAYOUT(
-//   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
-//        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, KC_VOLU, KC_MUTE, KC_VOLD, XXXXXXX, XXXXXXX,
-//   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-//        XXXXXXX, KC_LEFT,   KC_UP, KC_DOWN, KC_RGHT, XXXXXXX,    XXXXXXX, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, XXXXXXX,
-//   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-//        XXXXXXX, KC_HOME, KC_PGUP, KC_PGDN,  KC_END, XXXXXXX,    QK_BOOT,  EE_CLR, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-//   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-//                                   _______, _______, XXXXXXX,    _______, XXXXXXX 
-//   //                            ╰───────────────────────────╯ ╰──────────────────╯
      //,-----------------------------------------------------.                    ,-----------------------------------------------------.
          _______, _______, KC_PERCENT, RSFT(KC_LBRC), RSFT(KC_RBRC), KC_HASH,          KC_PIPE, KC_AMPR, KC_ASTR, KC_GRV, _______, _______,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -140,15 +130,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [LAYER_POINTER] = LAYOUT(
-//   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
-//        QK_BOOT,  EE_CLR, XXXXXXX, XXXXXXX, DPI_MOD, S_D_MOD,    S_D_MOD, DPI_MOD, XXXXXXX, XXXXXXX,  EE_CLR, QK_BOOT,
-//   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-//        XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,    XXXXXXX, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, XXXXXXX,
-//   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-//        XXXXXXX, _______, DRGSCRL, SNIPING, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, SNIPING, DRGSCRL, _______, XXXXXXX,
-//   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-//                                   KC_BTN2, KC_BTN1, KC_BTN3,    KC_BTN3, KC_BTN1
-//   //                            ╰───────────────────────────╯ ╰──────────────────╯
      //,-----------------------------------------------------.                    ,-----------------------------------------------------.
          QK_BOOT, _______,  _______, _______,S_D_MOD, DPI_MOD,                        _______,  KC_MUTE,KC_VOLU , KC_VOLD ,_______, _______,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
