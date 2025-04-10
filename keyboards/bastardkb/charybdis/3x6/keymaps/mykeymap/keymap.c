@@ -23,6 +23,7 @@ enum charybdis_keymap_layers {
     LAYER_LOWER,
     LAYER_RAISE,
     LAYER_POINTER,
+    LAYER_CONGIF,
 };
 
 /** \brief Automatically enable sniping-mode on the pointer layer. */
@@ -44,6 +45,8 @@ static uint16_t auto_pointer_layer_timer = 0;
 #define RAISE MO(LAYER_RAISE)
 #define PT_Z LT(LAYER_POINTER, KC_Z)
 #define PT_SLSH LT(LAYER_POINTER, KC_SLSH)
+#define DPI_UP POINTER_DEFAULT_DPI_FORWARD
+#define DPI_DOWN POINTER_DEFAULT_DPI_REVERSE
 
 // my modifications
 
@@ -68,10 +71,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // Tap Dance declarations      
 enum {
-    TD_SHOW_SCREEN
+    TD_SHOW_SCREEN,
+    TD_CONFIG,
 };
 
-const uint16_t PROGMEM lockscr_combo[] = {KC_CAPS, KC_ENT, COMBO_END};
+const uint16_t PROGMEM lockscr_combo[] = {KC_T, KC_Y, COMBO_END};
 const uint16_t PROGMEM printscreen[] = { KC_G, KC_H, COMBO_END};
 const uint16_t PROGMEM esc_combo[] = {KC_U, KC_I, COMBO_END};
 const uint16_t PROGMEM ent_combo[] = {KC_M, KC_COMM, COMBO_END};
@@ -85,8 +89,8 @@ combo_t key_combos[] = {
 
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
-    // Tap once for Escape, twice for Caps Lock
     [TD_SHOW_SCREEN] = ACTION_TAP_DANCE_DOUBLE(LCTL(KC_UP), LGUI(KC_UP)),
+    [TD_CONFIG] = ACTION_TAP_DANCE_DOUBLE(KC_ENT, TO(LAYER_CONGIF)),
 };
 
 
@@ -94,11 +98,11 @@ tap_dance_action_t tap_dance_actions[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
      //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-          KC_CAPS,   KC_Q,   KC_W,   KC_E,     KC_R,    KC_T,                          KC_Y,   KC_U,    KC_I,    KC_O,     KC_P,  KC_ENT,
+          KC_CAPS,   KC_Q,   KC_W,   KC_E,     KC_R,    KC_T,                          KC_Y,   KC_U,    KC_I,    KC_O,  KC_P,  LT(LAYER_CONGIF, KC_ENT),
      //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
         KC_BSPC, LCMD_T(KC_A), LOPT_T(KC_S), CTL_T(KC_D), KC_F, KC_G,              KC_H, KC_J, RCTL_T(KC_K),ROPT_T(KC_L),RCMD_T(KC_SCLN), KC_QUOT,
      //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT, LT(LAYER_LOWER, KC_Z), KC_X, KC_C, KC_V,  LT(LAYER_POINTER, KC_B),   KC_N,   KC_M,   KC_COMM, KC_DOT,  LT(LAYER_RAISE, KC_SLSH), KC_RSFT,
+      KC_LSFT, LT(LAYER_LOWER, KC_Z), KC_X, KC_C, KC_V, KC_B,  KC_N,                KC_M,   KC_COMM, KC_DOT,  LT(LAYER_RAISE, KC_SLSH), KC_RSFT,
      //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
      LSFT_T(KC_ESC) , LT(LAYER_POINTER, KC_BTN1),  TD(TD_SHOW_SCREEN),                 KC_DEL, RSFT_T(KC_SPC)
      //                             `--------------------------'                   `--------------------------'
@@ -106,13 +110,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [LAYER_LOWER] = LAYOUT(
 //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-            RGB_MOD, RGB_TOG, RGB_VAI, RGB_VAD, _______, _______,                      _______, KC_1,   KC_2,   KC_3,  _______,  _______,
+            _______, _______, _______, _______, _______, _______,                      _______, KC_1,   KC_2,   KC_3,  _______,  _______,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
             _______, _______, _______, RCS(KC_TAB), LCTL(KC_TAB), _______,             _______, KC_4,   KC_5,   KC_6,   KC_UNDO, _______,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
             _______, _______,  KC_LGUI, KC_BTN4, KC_BTN1 , KC_BTN5,                      _______,  KC_7,   KC_8,   KC_9,   KC_0,  _______,
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                        _______, KC_TAB, _______,                       _______, _______
+                                        KC_BTN2, KC_TAB, _______,                       _______, _______
         //`--------------------------'  `--------------------------'
 
   ),
@@ -125,13 +129,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
         _______, KC_BSLS, KC_CIRC, KC_LBRC, KC_RBRC, KC_DLR,                           KC_LGUI, KC_BTN1,  KC_BTN2, DRGSCRL, _______, _______,
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-        _______, _______, _______,                   KC_BTN1, KC_TAB
+        _______, _______, _______,                   _______, KC_TAB
         //`--------------------------'  `--------------------------'
   ),
 
   [LAYER_POINTER] = LAYOUT(
      //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-         QK_BOOT, _______,  _______, _______,S_D_MOD, DPI_MOD,                        _______,  KC_MUTE,KC_VOLU , KC_VOLD ,_______, _______,
+         _______, _______,  _______, _______,_______, _______,                        _______,  KC_MUTE,KC_VOLU , KC_VOLD ,_______, _______,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
          _______,  KC_F12,  KC_F7  , KC_F8 ,  KC_F10  , _______,                       KC_BTN5, KC_LEFT,  KC_UP,  KC_DOWN,  KC_RGHT, _______,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -140,8 +144,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______,         KC_BTN1 , KC_BTN2
         //`--------------------------'  `--------------------------'
   ),
+
+  [LAYER_CONGIF] = LAYOUT(
+    //,-----------------------------------------------------.                      ,-----------------------------------------------------.
+        RGB_MOD, RGB_TOG, RGB_VAI, RGB_VAD,  EE_CLR, QK_BOOT,                          QK_BOOT,  EE_CLR,_______ , _______ ,_______, _______,
+       //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+       DPI_UP, DPI_DOWN, _______,  _______, _______ ,  _______                      , _______, _______, _______,  _______,  DPI_UP, DPI_DOWN, 
+       //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+       _______,  _______, _______, _______ , _______, _______,                        _______,  _______, _______, _______,_______, _______,
+       //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+       _______, _______, _______,         _______ , _______
+       //`--------------------------'  `--------------------------'
+ ),
 };
-// clang-format on
+// clang-format onqqaq
+
+
+
 
 #ifdef POINTING_DEVICE_ENABLE
 #    ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
@@ -182,3 +201,30 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 // Forward-declare this helper function since it is defined in rgb_matrix.c.
 void rgb_matrix_update_pwm_buffers(void);
 #endif
+
+// my RGB effects
+
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    if (host_keyboard_led_state().caps_lock) {
+        for (uint8_t i = led_min; i < led_max; i++) {
+            rgb_matrix_set_color(i, RGB_RED);
+        }
+    } else {
+        for (uint8_t i = led_min; i < led_max; i++) {
+            switch(get_highest_layer(layer_state|default_layer_state)) {
+                case 3:
+                rgb_matrix_set_color(i, RGB_PURPLE);
+                break;
+                case 2:
+                    rgb_matrix_set_color(i, RGB_CYAN);
+                    break;
+                case 1:
+                    rgb_matrix_set_color(i, RGB_GREEN);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    return false;
+}
