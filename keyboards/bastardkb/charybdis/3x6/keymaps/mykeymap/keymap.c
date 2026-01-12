@@ -27,7 +27,7 @@ enum charybdis_keymap_layers {
 };
 
 /** \brief Automatically enable sniping-mode on the pointer layer. */
-#define CHARYBDIS_AUTO_SNIPING_ON_LAYER LAYER_POINTER
+#define CHARYBDIS_AUTO_SNIPING_ON_LAYER LAYER_CONGIF // it was before LAYER_POINTER
 
 #ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 static uint16_t auto_pointer_layer_timer = 0;
@@ -79,12 +79,14 @@ const uint16_t PROGMEM lockscr_combo[] = {KC_T, KC_Y, COMBO_END};
 const uint16_t PROGMEM printscreen[] = { KC_G, KC_H, COMBO_END};
 const uint16_t PROGMEM esc_combo[] = {KC_U, KC_I, COMBO_END};
 const uint16_t PROGMEM ent_combo[] = {KC_M, KC_COMM, COMBO_END};
+const uint16_t PROGMEM ent_combo2[] = {KC_C, KC_V, COMBO_END};
 
 combo_t key_combos[] = {
     COMBO(lockscr_combo, LCTL(LGUI(KC_Q))),
     COMBO(printscreen, SCMD(KC_5)),
     COMBO(esc_combo, KC_ESC),
-    COMBO(ent_combo, KC_ENT)
+    COMBO(ent_combo, KC_ENT),
+    COMBO(ent_combo2, KC_ENT)
 };
 
 // Tap Dance definitions
@@ -100,11 +102,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      //,-----------------------------------------------------.                    ,-----------------------------------------------------.
           KC_CAPS,   KC_Q,   KC_W,   KC_E,     KC_R,    KC_T,                          KC_Y,   KC_U,    KC_I,    KC_O,  KC_P,  LT(LAYER_CONGIF, KC_ENT),
      //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        KC_BSPC, LCMD_T(KC_A), LOPT_T(KC_S), CTL_T(KC_D), KC_F, KC_G,              KC_H, KC_J, RCTL_T(KC_K),ROPT_T(KC_L),RCMD_T(KC_SCLN), KC_QUOT,
+        KC_BSPC, LCMD_T(KC_A), LOPT_T(KC_S), CTL_T(KC_D), LSFT_T(KC_F), KC_G,              KC_H, LSFT_T(KC_J), RCTL_T(KC_K),ROPT_T(KC_L),RCMD_T(KC_SCLN), KC_QUOT,
      //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT, LT(LAYER_LOWER, KC_Z), KC_X, KC_C, KC_V, KC_B,  KC_N,                KC_M,   KC_COMM, KC_DOT,  LT(LAYER_RAISE, KC_SLSH), KC_RSFT,
+      KC_LSFT, LT(LAYER_LOWER, KC_Z), KC_X, KC_C, KC_V, KC_B,                     KC_N,KC_M,  KC_COMM, KC_DOT,  LT(LAYER_RAISE, KC_SLSH), KC_RSFT,
      //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-     LSFT_T(KC_ESC) , LT(LAYER_POINTER, KC_BTN1),  TD(TD_SHOW_SCREEN),                 KC_DEL, RSFT_T(KC_SPC)
+     LT(LAYER_POINTER, KC_BTN1), KC_BSPC ,TD(TD_SHOW_SCREEN) ,                 KC_DEL, RSFT_T(KC_SPC)
      //                             `--------------------------'                   `--------------------------'
   ),
 
@@ -116,20 +118,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
             _______, _______,  KC_LGUI, KC_BTN4, KC_BTN1 , KC_BTN5,                      _______,  KC_7,   KC_8,   KC_9,   KC_0,  _______,
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                        KC_BTN2, KC_TAB, _______,                       _______, _______
+                                        KC_BTN2, KC_TAB, DRGSCRL,                       _______, _______
         //`--------------------------'  `--------------------------'
 
   ),
 
   [LAYER_RAISE] = LAYOUT(
      //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-         _______, _______, KC_PERCENT, RSFT(KC_LBRC), RSFT(KC_RBRC), KC_HASH,          KC_PIPE, KC_AMPR, KC_ASTR, KC_GRV, _______, _______,
+         _______, KC_QUOT, KC_PERCENT, RSFT(KC_LBRC), RSFT(KC_RBRC), KC_HASH,          KC_PIPE, KC_AMPR, KC_ASTR, KC_GRV, _______, _______,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-         _______, _______, KC_AT,  KC_LPRN, KC_RPRN, KC_TILD,                          KC_EXLM ,KC_EQL, KC_PLUS, KC_MINUS, _______, _______,
+         _______, KC_DOUBLE_QUOTE, KC_AT,  KC_LPRN, KC_RPRN, KC_TILD,                          KC_EXLM ,KC_EQL, KC_PLUS, KC_MINUS, _______, _______,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
         _______, KC_BSLS, KC_CIRC, KC_LBRC, KC_RBRC, KC_DLR,                           KC_LGUI, KC_BTN1,  KC_BTN2, DRGSCRL, _______, _______,
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-        _______, _______, _______,                   _______, KC_TAB
+        _______, KC_LSFT, _______,                   _______, KC_TAB
         //`--------------------------'  `--------------------------'
   ),
 
@@ -141,7 +143,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
         _______,  DRGSCRL, KC_BTN4, KC_BTN2 , KC_BTN1, KC_BTN5,                        KC_BTN4,  NEWLINE, KC_HOME, KC_END,SNIPING, DRGSCRL,
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-        _______, _______, _______,         KC_BTN1 , KC_BTN2
+        _______, _______, _______,         KC_BTN1 , KC_RSFT
         //`--------------------------'  `--------------------------'
   ),
 
