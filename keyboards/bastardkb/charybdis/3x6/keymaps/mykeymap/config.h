@@ -37,3 +37,14 @@
 
 #define SPLIT_LAYER_STATE_ENABLE
 #define SPLIT_LED_STATE_ENABLE
+
+// encoder
+/* Define encoder pads.
+* \brief Encoder pads wired to MISO and MOSI
+*/
+#define ENCODER_DEFAULT_POS 0x3
+#define ENCODERS_PAD_A { A6 }
+#define ENCODERS_PAD_B { A7 }
+//Encoders right define is required to prevent the trackball SPI pins from being overridden
+#define ENCODERS_PAD_A_RIGHT { NO_PIN }
+#define ENCODERS_PAD_B_RIGHT { NO_PIN }
