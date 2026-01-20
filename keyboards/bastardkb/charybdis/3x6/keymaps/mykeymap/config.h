@@ -37,3 +37,9 @@
 
 #define SPLIT_LAYER_STATE_ENABLE
 #define SPLIT_LED_STATE_ENABLE
+
+// Encoder R1 and R2.
+#define ENCODERS_PAD_A { GP20 }
+#define ENCODERS_PAD_B { GP23 }
+#define ENCODERS_PAD_A_RIGHT { NO_PIN }
+#define ENCODERS_PAD_B_RIGHT { NO_PIN }
