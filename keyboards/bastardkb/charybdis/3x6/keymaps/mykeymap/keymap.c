@@ -50,8 +50,6 @@ static uint16_t auto_pointer_layer_timer = 0;
 
 // my modifications
 
-
-
 enum custom_keycodes {
     NEWLINE = SAFE_RANGE,
     PRINT_SCR
