@@ -42,9 +42,9 @@
 /* Define encoder pads.
 * \brief Encoder pads wired to MISO and MOSI
 */
-#define ENCODER_DEFAULT_POS 0x3
-#define ENCODERS_PAD_A { GP20 }
+#define ENCODERS_PAD_A { GP22 }
 #define ENCODERS_PAD_B { GP23 }
-//Encoders right define is required to prevent the trackball SPI pins from being overridden
+#define ENCODER_RESOLUTION 2
 #define ENCODERS_PAD_A_RIGHT { NO_PIN }
 #define ENCODERS_PAD_B_RIGHT { NO_PIN }
+#define ENCODER_RESOLUTIONS_RIGHT {  }
