@@ -50,6 +50,14 @@ static uint16_t auto_pointer_layer_timer = 0;
 
 // my modifications
 
+#if defined(ENCODER_MAP_ENABLE)
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
+    [0] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU)  },
+    [1] = { ENCODER_CCW_CW(UG_HUED, UG_HUEU)  },
+    [2] = { ENCODER_CCW_CW(KC_RIGHT, KC_LEFT) },
+};
+#endif
+
 enum custom_keycodes {
     NEWLINE = SAFE_RANGE,
     PRINT_SCR
