@@ -52,11 +52,11 @@ static uint16_t auto_pointer_layer_timer = 0;
 
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-    [0] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU)  },
-    [1] = { ENCODER_CCW_CW(UG_HUED, UG_HUEU)  },
-    [2] = { ENCODER_CCW_CW(KC_RIGHT, KC_LEFT) },
-    [3] = { ENCODER_CCW_CW(KC_RIGHT, KC_LEFT) },
-    [4] = { ENCODER_CCW_CW(KC_RIGHT, KC_LEFT) },
+    [0] = { ENCODER_CCW_CW(KC_VOLU , KC_VOLD)},
+    [1] = { ENCODER_CCW_CW(UG_HUED, UG_HUEU)},
+    [2] = { ENCODER_CCW_CW(KC_RIGHT, KC_LEFT)},
+    [3] = { ENCODER_CCW_CW(KC_VOLU , KC_VOLD)},
+    [4] = { ENCODER_CCW_CW(DPI_UP, DPI_DOWN)},
 };
 #endif
 
@@ -116,7 +116,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LSFT, LT(LAYER_LOWER, KC_Z), KC_X, KC_C, KC_V, KC_B,                     KC_N,KC_M,  KC_COMM, KC_DOT,  LT(LAYER_RAISE, KC_SLSH), KC_RSFT,
      //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-     LT(LAYER_POINTER, KC_BTN1), KC_BSPC ,TD(TD_SHOW_SCREEN) ,                 KC_DEL, RSFT_T(KC_SPC)
+     LT(LAYER_POINTER, KC_BTN1), KC_BSPC ,KC_BSPC ,                 KC_DEL, RSFT_T(KC_SPC)
      //                             `--------------------------'                   `--------------------------'
   ),
 
@@ -128,7 +128,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
             _______, _______,  KC_LGUI, KC_BTN4, KC_BTN1 , KC_BTN5,                      _______,  KC_7,   KC_8,   KC_9,   KC_0,  _______,
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                        KC_BTN2, KC_TAB, DRGSCRL,                       _______, _______
+                                        TD(TD_SHOW_SCREEN), KC_TAB, DRGSCRL,                       _______, _______
         //`--------------------------'  `--------------------------'
 
   ),
@@ -161,7 +161,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //,-----------------------------------------------------.                      ,-----------------------------------------------------.
         RGB_MOD, RGB_TOG, RGB_VAI, RGB_VAD,  EE_CLR, QK_BOOT,                          QK_BOOT,  EE_CLR,_______ , _______ ,_______, _______,
        //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       DPI_UP, DPI_DOWN, _______,  _______, _______ ,  _______                      , _______, _______, _______,  _______,  DPI_UP, DPI_DOWN, 
+       DPI_UP, DPI_DOWN, _______,  _______, _______ ,  _______                      , DPI_UP, DPI_DOWN, _______,  _______,  DPI_UP, DPI_DOWN, 
        //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
        _______,  _______, _______, _______ , _______, _______,                        _______,  _______, _______, _______,_______, _______,
        //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
