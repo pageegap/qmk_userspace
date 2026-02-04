@@ -53,10 +53,10 @@ static uint16_t auto_pointer_layer_timer = 0;
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     [0] = { ENCODER_CCW_CW(KC_VOLU , KC_VOLD)},
-    [1] = { ENCODER_CCW_CW(UG_HUED, UG_HUEU)},
-    [2] = { ENCODER_CCW_CW(KC_RIGHT, KC_LEFT)},
-    [3] = { ENCODER_CCW_CW(KC_VOLU , KC_VOLD)},
-    [4] = { ENCODER_CCW_CW(DPI_UP, DPI_DOWN)},
+    [1] = { ENCODER_CCW_CW(DPI_UP, DPI_DOWN)},
+    [2] = { ENCODER_CCW_CW(MS_WHLD, MS_WHLU)},
+    [3] = { ENCODER_CCW_CW(RM_HUEU , RM_HUED)},
+    [4] = { ENCODER_CCW_CW(RM_PREV, RM_NEXT)},
 };
 #endif
 
@@ -128,7 +128,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
             _______, _______,  KC_LGUI, KC_BTN4, KC_BTN1 , KC_BTN5,                      _______,  KC_7,   KC_8,   KC_9,   KC_0,  _______,
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                        TD(TD_SHOW_SCREEN), KC_TAB, DRGSCRL,                       _______, _______
+                                        KC_TAB, KC_TAB, TD(TD_SHOW_SCREEN),                       _______, _______
         //`--------------------------'  `--------------------------'
 
   ),
