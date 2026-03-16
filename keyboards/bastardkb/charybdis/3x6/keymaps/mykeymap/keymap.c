@@ -96,7 +96,7 @@ combo_t key_combos[] = {
     COMBO(printscreen, SCMD(KC_5)),
     COMBO(esc_combo, KC_ESC),
     COMBO(ent_combo, KC_ENT),
-    COMBO(ent_combo2, KC_ENT)
+    COMBO(ent_combo2, KC_BSPC)
 };
 
 // Tap Dance definitions
@@ -110,13 +110,13 @@ tap_dance_action_t tap_dance_actions[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
      //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-          KC_CAPS,   KC_Q,   KC_W,   KC_E,     KC_R,    KC_T,                          KC_Y,   KC_U,    KC_I,    KC_O,  KC_P,  LT(LAYER_CONGIF, KC_ENT),
+          KC_CAPS,   KC_Q,   KC_W,   KC_E,     KC_R,    KC_T,                        KC_Y,   KC_U,    KC_I,    KC_O,  KC_P,  LT(LAYER_CONGIF, KC_ENT),
      //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        KC_BSPC, LCMD_T(KC_A), LOPT_T(KC_S), CTL_T(KC_D), LSFT_T(KC_F), KC_G,              KC_H, LSFT_T(KC_J), RCTL_T(KC_K),ROPT_T(KC_L),RCMD_T(KC_SCLN), KC_QUOT,
+        KC_BSPC, LCMD_T(KC_A), LOPT_T(KC_S), CTL_T(KC_D), LSFT_T(KC_F), KC_G,        KC_H, LSFT_T(KC_J), RCTL_T(KC_K),ROPT_T(KC_L),RCMD_T(KC_SCLN), KC_QUOT,
      //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LSFT, LT(LAYER_LOWER, KC_Z), KC_X, KC_C, KC_V, KC_B,                     KC_N,KC_M,  KC_COMM, KC_DOT,  LT(LAYER_RAISE, KC_SLSH), KC_RSFT,
      //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-     LT(LAYER_POINTER, KC_BTN1), KC_BSPC ,KC_BSPC ,                 KC_DEL, RSFT_T(KC_SPC)
+     LT(LAYER_POINTER, KC_BTN1), KC_BSPC ,TD(TD_SHOW_SCREEN) ,                 KC_DEL, RSFT_T(KC_SPC)
      //                             `--------------------------'                   `--------------------------'
   ),
 
@@ -127,8 +127,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
             _______, _______, _______, RCS(KC_TAB), LCTL(KC_TAB), _______,             _______, KC_4,   KC_5,   KC_6,   KC_UNDO, _______,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
             _______, _______,  KC_LGUI, KC_BTN4, KC_BTN1 , KC_BTN5,                      _______,  KC_7,   KC_8,   KC_9,   KC_0,  _______,
-        //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                        KC_TAB, KC_TAB, TD(TD_SHOW_SCREEN),                       _______, _______
+    //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                        KC_TAB, KC_TAB, TD(TD_SHOW_SCREEN),                       _______, TD(TD_SHOW_SCREEN)
         //`--------------------------'  `--------------------------'
 
   ),
@@ -137,11 +137,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      //,-----------------------------------------------------.                    ,-----------------------------------------------------.
          _______, KC_QUOT, KC_PERCENT, RSFT(KC_LBRC), RSFT(KC_RBRC), KC_HASH,          KC_PIPE, KC_AMPR, KC_ASTR, KC_GRV, _______, _______,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-         _______, KC_DOUBLE_QUOTE, KC_AT,  KC_LPRN, KC_RPRN, KC_TILD,                          KC_EXLM ,KC_EQL, KC_PLUS, KC_MINUS, _______, _______,
+         _______, KC_DOUBLE_QUOTE, KC_AT,  KC_LPRN, KC_RPRN, KC_TILD,                  KC_EXLM ,KC_EQL, KC_PLUS, KC_MINUS, _______, _______,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
         _______, KC_BSLS, KC_CIRC, KC_LBRC, KC_RBRC, KC_DLR,                           KC_LGUI, KC_BTN1,  KC_BTN2, DRGSCRL, _______, _______,
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-        _______, KC_LSFT, _______,                   _______, KC_TAB
+        _______, KC_LSFT, _______,                   KC_DEL, KC_TAB
         //`--------------------------'  `--------------------------'
   ),
 
