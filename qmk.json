@@ -3,8 +3,8 @@
     "build_targets": [
         ["bastardkb/charybdis/3x6/splinktegrated_rev1", "vendor"],
         ["bastardkb/charybdis/3x5/splinktegrated_rev1", "vendor"], 
-        ["bastardkb/charybdis/4x6_left/splinktegrated_rev1", "vendor"],
         ["bastardkb/charybdis/3x6_left/splinktegrated_rev1", "vendor"],
         ["bastardkb/tbkmini/splinktegrated_rev1", "vendor"],
+        ["bastardkb/charybdis/3x6/splinktegrated_rev1", "mykeymap"]
     ]
 }
