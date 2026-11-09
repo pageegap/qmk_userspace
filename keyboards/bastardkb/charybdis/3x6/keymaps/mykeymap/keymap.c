@@ -45,66 +45,123 @@ static uint16_t auto_pointer_layer_timer = 0;
 #define RAISE MO(LAYER_RAISE)
 #define PT_Z LT(LAYER_POINTER, KC_Z)
 
+// Tap Dance declarations      
+enum {
+    TD_SHOW_SCREEN
+};
+
+// Tap Dance definitions
+tap_dance_action_t tap_dance_actions[] = {
+    [TD_SHOW_SCREEN] = ACTION_TAP_DANCE_DOUBLE(LCTL(KC_UP), LGUI(KC_UP))
+};
+
+// 
+enum custom_keycodes {
+    NEWLINE = SAFE_RANGE,
+    PRINT_SCR
+};
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case NEWLINE:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LCTL("e"));
+                register_code(KC_ENT);
+                unregister_code(KC_ENT);
+            }
+            return false;
+    }
+
+    return true;
+}
+
+// combos
+const uint16_t PROGMEM lockscr_combo[] = {KC_T, KC_Y, COMBO_END};
+const uint16_t PROGMEM printscreen[] = { KC_G, KC_H, COMBO_END};
+const uint16_t PROGMEM esc_combo[] = {KC_U, KC_I, COMBO_END};
+const uint16_t PROGMEM ent_combo[] = {KC_M, KC_COMM, COMBO_END};
+const uint16_t PROGMEM ent_combo2[] = {KC_C, KC_V, COMBO_END};
+
+combo_t key_combos[] = {
+    COMBO(lockscr_combo, LCTL(LGUI(KC_Q))),
+    COMBO(printscreen, SCMD(KC_5)),
+    COMBO(esc_combo, KC_ESC),
+    COMBO(ent_combo, KC_ENT),
+    COMBO(ent_combo2, KC_BSPC)
+};
+// end combos
+
+// encoder behavior
+#if defined(ENCODER_MAP_ENABLE)
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
+    [0] = { ENCODER_CCW_CW(KC_VOLU , KC_VOLD)},
+    [1] = { ENCODER_CCW_CW(DPI_UP, DPI_DOWN)},
+    [2] = { ENCODER_CCW_CW(MS_WHLD, MS_WHLU)},
+    [3] = { ENCODER_CCW_CW(RM_HUEU , RM_HUED)},
+    [4] = { ENCODER_CCW_CW(RM_PREV, RM_NEXT)},
+};
+#endif
+
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
-       KC_LGUI,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,       KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_RGUI,
+       KC_CAPS,   KC_Q,   KC_W,   KC_E,     KC_R,    KC_T,      KC_Y,   KC_U,    KC_I,    KC_O,  KC_P,  LT(LAYER_CONGIF, KC_ENT),
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,       KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_RCTL,
+       KC_BSPC, LCMD_T(KC_A), LOPT_T(KC_S), CTL_T(KC_D), LSFT_T(KC_F), KC_G,        KC_H, LSFT_T(KC_J), RCTL_T(KC_K),ROPT_T(KC_L),RCMD_T(KC_SCLN), KC_QUOT,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       KC_LSFT,    PT_Z,    KC_X,    KC_C,    KC_V,    KC_B,       KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_RSFT,
+       KC_LSFT, LT(LAYER_LOWER, KC_Z), KC_X, KC_C, KC_V, KC_B,   KC_N,KC_M,  KC_COMM, KC_DOT,  LT(LAYER_RAISE, KC_SLSH), KC_RSFT,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                                  KC_BSPC,  KC_SPC,   LOWER,      RAISE,  KC_ENT
-  //                            ╰───────────────────────────╯ ╰──────────────────╯
+       LT(LAYER_POINTER, MS_BTN1), KC_BSPC ,TD(TD_SHOW_SCREEN) ,   KC_DEL, RSFT_T(KC_SPC)
+  //  ╰───────────────────────────╯                              ╰─--------------─────────────────╯
   ),
 
   [LAYER_LOWER] = LAYOUT(
-  // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
-       XXXXXXX, RM_TOGG, KC_MNXT, KC_MPLY, KC_MPRV, XXXXXXX,    KC_LBRC,    KC_7,    KC_8,    KC_9, KC_RBRC, XXXXXXX,
-  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,    KC_PPLS,    KC_4,    KC_5,    KC_6, KC_PMNS, XXXXXXX,
-  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    KC_PAST,    KC_1,    KC_2,    KC_3, KC_PSLS, XXXXXXX,
-  // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                                  XXXXXXX, XXXXXXX, _______,    XXXXXXX, _______
-  //                            ╰───────────────────────────╯ ╰──────────────────╯
+  // ╭──────────────────────────────────────────────────────╮        ╭──────────────────────────────────────────────────────╮
+      _______, _______, _______, _______, _______, _______,           _______, KC_1,   KC_2,   KC_3,  _______,  _______,
+  //|--------+--------+--------+--------+--------+--------|          |--------+--------+--------+--------+--------+--------|
+      _______, _______, _______, RCS(KC_TAB), LCTL(KC_TAB), _______,   _______, KC_4,   KC_5,   KC_6,   KC_UNDO, _______,
+  //|--------+--------+--------+--------+--------+--------|          |--------+--------+--------+--------+--------+--------|
+      _______, _______,  KC_LGUI, MS_BTN4, MS_BTN1 , MS_BTN5,          _______,  KC_7,   KC_8,   KC_9,   KC_0,  _______,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                           KC_TAB, KC_TAB, TD(TD_SHOW_SCREEN),       _______, TD(TD_SHOW_SCREEN)
+  //                       ╰───────────────────────────╯            ╰──────────────────╯
   ),
 
   [LAYER_RAISE] = LAYOUT(
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
-       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, KC_VOLU, KC_MUTE, KC_VOLD, XXXXXXX, XXXXXXX,
-  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, KC_LEFT,   KC_UP, KC_DOWN, KC_RGHT, XXXXXXX,    XXXXXXX, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, XXXXXXX,
-  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, KC_HOME, KC_PGUP, KC_PGDN,  KC_END, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                                  _______, _______, XXXXXXX,    _______, XXXXXXX
+     _______, KC_QUOT, KC_PERCENT, RSFT(KC_LBRC), RSFT(KC_RBRC), KC_HASH,          KC_PIPE, KC_AMPR, KC_ASTR, KC_GRV, _______, _______,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+     _______, KC_DOUBLE_QUOTE, KC_AT,  KC_LPRN, KC_RPRN, KC_TILD,                  KC_EXLM ,KC_EQL, KC_PLUS, KC_MINUS, _______, _______,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+     _______, KC_BSLS, KC_CIRC, KC_LBRC, KC_RBRC, KC_DLR,                           KC_LGUI, MS_BTN1,  MS_BTN2, DRGSCRL, _______, _______,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+     _______, KC_LSFT, _______,                   KC_DEL, KC_TAB
   //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
 
   [LAYER_POINTER] = LAYOUT(
-  // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
-       XXXXXXX, PZOOM,   PVOLUME, PTABS,   DPI_MOD, S_D_MOD,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, PHIST,      XXXXXXX, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, XXXXXXX,
-  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, _______, DRGSCRL, SNIPING, CURSOR,  PBRIGHT,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX,
-  // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                                  MS_BTN2, MS_BTN1, MS_BTN3,    XXXXXXX, XXXXXXX
-  //                            ╰───────────────────────────╯ ╰──────────────────╯
+  // ╭──────────────────────────────────────────────────────╮   ╭──────────────────────────────────────────────────────╮
+       _______, _______,  _______, _______,_______, _______,     _______,  KC_MUTE,KC_VOLU , KC_VOLD ,_______, _______,
+  //|--------+--------+--------+--------+--------+--------|     |--------+--------+--------+--------+--------+--------|
+       _______,  KC_F12,  KC_F7  , KC_F8 ,  KC_F10  , _______,    MS_BTN5, KC_LEFT,  KC_UP,  KC_DOWN,  KC_RGHT, _______,
+  //|--------+--------+--------+--------+--------+--------|      |--------+--------+--------+--------+--------+--------|
+       _______,  DRGSCRL, MS_BTN4, MS_BTN2 , MS_BTN1, MS_BTN5,     MS_BTN4,  NEWLINE, KC_HOME, KC_END,SNIPING, DRGSCRL,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                    _______, _______, _______,          MS_BTN1 , KC_RSFT
+  //                            ╰───────────────────────────╯         ╰──────────────────╯
   ),
 
   [LAYER_CONGIF] = LAYOUT(
-    //,-----------------------------------------------------.                      ,-----------------------------------------------------.
-        RM_NEXT, RM_TOGG, RM_VALU, RM_VALD,  EE_CLR, QK_BOOT,                          QK_BOOT,  EE_CLR,_______ , _______ ,_______, _______,
-       //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       DPI_MOD, DPI_RMOD, _______,  _______, _______ ,  _______                      , DPI_MOD, DPI_RMOD, _______,  _______,  DPI_MOD, DPI_RMOD, 
-       //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       _______,  _______, _______, _______ , _______, _______,                        _______,  _______, _______, _______,_______, _______,
-       //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+    //,-----------------------------------------------------.    ,-----------------------------------------------------.
+        RM_NEXT, RM_TOGG, RM_VALU, RM_VALD,  EE_CLR, QK_BOOT,     QK_BOOT,  EE_CLR,_______ , _______ ,_______, _______,
+    //|--------+--------+--------+--------+--------+--------|    |--------+--------+--------+--------+--------+--------|
+       DPI_MOD, DPI_RMOD, _______,  _______, _______ ,  _______  , DPI_MOD, DPI_RMOD, _______,  _______,  DPI_MOD, DPI_RMOD, 
+    //|--------+--------+--------+--------+--------+--------|    |--------+--------+--------+--------+--------+--------|
+       _______,  _______, _______, _______ , _______, _______,      _______,  _______, _______, _______,_______, _______,
+    //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
        _______, _______, _______,         _______ , _______
-       //`--------------------------'  `--------------------------'
+    //`--------------------------'  `--------------------------'
   ),
 };
 // clang-format on
