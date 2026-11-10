@@ -95,7 +95,7 @@ combo_t key_combos[] = {
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     [0] = { ENCODER_CCW_CW(KC_VOLU , KC_VOLD)},
-    [1] = { ENCODER_CCW_CW(DPI_UP, DPI_DOWN)},
+    [1] = { ENCODER_CCW_CW(DPI_MOD, DPI_RMOD)},
     [2] = { ENCODER_CCW_CW(MS_WHLD, MS_WHLU)},
     [3] = { ENCODER_CCW_CW(RM_HUEU , RM_HUED)},
     [4] = { ENCODER_CCW_CW(RM_PREV, RM_NEXT)},
@@ -112,7 +112,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        KC_LSFT, LT(LAYER_LOWER, KC_Z), KC_X, KC_C, KC_V, KC_B,   KC_N,KC_M,  KC_COMM, KC_DOT,  LT(LAYER_RAISE, KC_SLSH), KC_RSFT,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-       LT(LAYER_POINTER, MS_BTN1), KC_BSPC ,TD(TD_SHOW_SCREEN) ,   KC_DEL, RSFT_T(KC_SPC)
+       LT(LAYER_POINTER, MS_BTN1), KC_V ,KC_V ,   KC_DEL, RSFT_T(KC_SPC)
   //  ╰───────────────────────────╯                              ╰─--------------─────────────────╯
   ),
 
@@ -122,7 +122,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|          |--------+--------+--------+--------+--------+--------|
       _______, _______, _______, RCS(KC_TAB), LCTL(KC_TAB), _______,   _______, KC_4,   KC_5,   KC_6,   KC_UNDO, _______,
   //|--------+--------+--------+--------+--------+--------|          |--------+--------+--------+--------+--------+--------|
-      _______, _______,  KC_LGUI, MS_BTN4, MS_BTN1 , MS_BTN5,          _______,  KC_7,   KC_8,   KC_9,   KC_0,  _______,
+      _______, _______,  KC_LGUI, MS_BTN4, MS_BTN5 , _______,          _______,  KC_7,   KC_8,   KC_9,   KC_0,  _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                            KC_TAB, KC_TAB, TD(TD_SHOW_SCREEN),       _______, TD(TD_SHOW_SCREEN)
   //                       ╰───────────────────────────╯            ╰──────────────────╯
