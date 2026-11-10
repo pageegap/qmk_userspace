@@ -41,8 +41,7 @@ static uint16_t auto_pointer_layer_timer = 0;
 #    endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_THRESHOLD
 #endif     // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 
-#define LOWER MO(LAYER_LOWER)
-#define RAISE MO(LAYER_RAISE)
+#define PT_Z LT(LAYER_LOWER, KC_Z)
 
 // Tap Dance declarations      
 enum {
@@ -109,21 +108,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        KC_BSPC, LCMD_T(KC_A), LOPT_T(KC_S), CTL_T(KC_D), LSFT_T(KC_F), KC_G,        KC_H, LSFT_T(KC_J), RCTL_T(KC_K),ROPT_T(KC_L),RCMD_T(KC_SCLN), KC_QUOT,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       KC_LSFT, LT(LAYER_LOWER, KC_Z), KC_X, KC_C, KC_V, KC_B,   KC_N,KC_M,  KC_COMM, KC_DOT,  LT(LAYER_RAISE, KC_SLSH), KC_RSFT,
+       KC_LSFT, PT_Z, KC_X, KC_C, KC_V, KC_B,   KC_N,KC_M,  KC_COMM, KC_DOT,  LT(LAYER_RAISE, KC_SLSH), KC_RSFT,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-       LT(LAYER_POINTER, MS_BTN1), KC_V ,KC_E ,   KC_DEL, RSFT_T(KC_SPC)
+       LT(LAYER_POINTER, MS_BTN1), KC_BSPC ,KC_E ,   KC_DEL, RSFT_T(KC_SPC)
   //  ╰───────────────────────────╯                              ╰─--------------─────────────────╯
   ),
 
   [LAYER_LOWER] = LAYOUT(
   // ╭──────────────────────────────────────────────────────╮        ╭──────────────────────────────────────────────────────╮
-      _______, _______, _______, _______, _______, _______,           _______, KC_1,   KC_2,   KC_3,  _______,  _______,
+      KC_Q, _______, _______, _______, _______, _______,           _______, KC_1,   KC_2,   KC_3,  _______,  _______,
   //|--------+--------+--------+--------+--------+--------|          |--------+--------+--------+--------+--------+--------|
       _______, _______, _______, RCS(KC_TAB), LCTL(KC_TAB), _______,   _______, KC_4,   KC_5,   KC_6,   KC_UNDO, _______,
   //|--------+--------+--------+--------+--------+--------|          |--------+--------+--------+--------+--------+--------|
       _______, _______,  KC_LGUI, MS_BTN4, MS_BTN5 , _______,          _______,  KC_7,   KC_8,   KC_9,   KC_0,  _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                           KC_TAB, KC_TAB, TD(TD_SHOW_SCREEN),       _______, TD(TD_SHOW_SCREEN)
+                           KC_TAB, TD(TD_SHOW_SCREEN), TD(TD_SHOW_SCREEN),       _______, TD(TD_SHOW_SCREEN)
   //                       ╰───────────────────────────╯            ╰──────────────────╯
   ),
 
