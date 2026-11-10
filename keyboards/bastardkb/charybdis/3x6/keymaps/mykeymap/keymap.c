@@ -43,7 +43,6 @@ static uint16_t auto_pointer_layer_timer = 0;
 
 #define LOWER MO(LAYER_LOWER)
 #define RAISE MO(LAYER_RAISE)
-#define PT_Z LT(LAYER_POINTER, KC_Z)
 
 // Tap Dance declarations      
 enum {
@@ -112,7 +111,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        KC_LSFT, LT(LAYER_LOWER, KC_Z), KC_X, KC_C, KC_V, KC_B,   KC_N,KC_M,  KC_COMM, KC_DOT,  LT(LAYER_RAISE, KC_SLSH), KC_RSFT,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-       LT(LAYER_POINTER, MS_BTN1), KC_V ,KC_V ,   KC_DEL, RSFT_T(KC_SPC)
+       LT(LAYER_POINTER, MS_BTN1), KC_V ,KC_E ,   KC_DEL, RSFT_T(KC_SPC)
   //  ╰───────────────────────────╯                              ╰─--------------─────────────────╯
   ),
 
