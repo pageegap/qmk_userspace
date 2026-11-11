@@ -1,0 +1,28 @@
+Migration validation — 2026-11-11
+
+Target: bastardkb/charybdis/3x6/splinktegrated_rev1:mykeymap
+BastardKB firmware: bc50f889c80773e96bfcb1249f137b676cf0eb5f
+Userspace baseline: 80d06aa14cdf8bb5067069c7918e02662322781d
+Pointing module baseline: 309202383aca26a62b0f5670c51833a59206d146
+Compiler: Arm GNU Toolchain 14.2.Rel1, GCC 14.2.1
+
+PASS: complete RP2040 firmware compile and link, exit 0.
+PASS: five layer layouts, encoder mappings, combos, and tap dances match the
+      backup source after the documented layer rename and DPI replacements.
+PASS: actual local EEPROM storage code tested with Clang -Wall -Wextra -Werror.
+      Invalid storage is ignored; full configuration survives simulated RAM loss;
+      updated sniping DPI survives another save/reload.
+PASS: only local/bk_pointing_device selected by mykeymap/keymap.json.
+PASS: no Argos, raw-HID, or VIA symbols in the final ELF.
+PASS: no Argos headers in 189 compiler dependency files.
+PASS: UF2 block headers, block numbers, counts, end markers, and RP2040 family ID.
+PASS: bash -n build.sh.
+
+Artifact: bastardkb_charybdis_3x6_splinktegrated_rev1_mykeymap.uf2
+Size: 141824 bytes
+SHA256: 4436865715f5e48214b9431a3a0e3aaaa6f45121ab0d3e3704607d874532af25
+
+The original qmk_userspaceBU files were not modified. No firmware was flashed
+during validation.
+Physical keyboard behavior, including USB, split communication, trackball,
+encoder, RGB, and on-device EEPROM persistence, still needs hardware verification.
