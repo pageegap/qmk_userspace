@@ -1,5 +1,5 @@
 {
     "modules": [
-        "local/bk_pointing_device"
+        "bastardkb/bk_pointing_device"
     ]
 }

@@ -1,6 +1,6 @@
 #include "fake_qmk.h"
 #include "bk_pointing_device.h"
-#include "bk_pointing_storage.h"
+#include "storage_under_test.inc"
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>

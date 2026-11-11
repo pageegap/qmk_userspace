@@ -15,6 +15,7 @@ qmk config "user.qmk_home=$firmware_dir"
 qmk config "user.overlay_dir=$userspace_dir"
 
 cd -- "$userspace_dir"
+"$userspace_dir/apply-module-patches.sh"
 exec qmk compile -c \
     -kb bastardkb/charybdis/3x6/splinktegrated_rev1 \
     -km mykeymap -j 1 -e SKIP_GIT=yes "$@"

@@ -1,28 +1,29 @@
-Migration validation — 2026-11-11
+Migration validation — 2026-11-11 (upstream-module patch)
 
 Target: bastardkb/charybdis/3x6/splinktegrated_rev1:mykeymap
 BastardKB firmware: bc50f889c80773e96bfcb1249f137b676cf0eb5f
-Userspace baseline: 80d06aa14cdf8bb5067069c7918e02662322781d
-Pointing module baseline: 309202383aca26a62b0f5670c51833a59206d146
+Pointing module: upstream submodule 309202383aca26a62b0f5670c51833a59206d146
+Fixes: patches/pointing-no-argos.patch; three C files, 28 lines added, 18 removed
 Compiler: Arm GNU Toolchain 14.2.Rel1, GCC 14.2.1
 
-PASS: complete RP2040 firmware compile and link, exit 0.
-PASS: five layer layouts, encoder mappings, combos, and tap dances match the
-      backup source after the documented layer rename and DPI replacements.
-PASS: actual local EEPROM storage code tested with Clang -Wall -Wextra -Werror.
-      Invalid storage is ignored; full configuration survives simulated RAM loss;
-      updated sniping DPI survives another save/reload.
-PASS: only local/bk_pointing_device selected by mykeymap/keymap.json.
+PASS: clean ./build.sh compile and link using the patched upstream module, exit 0.
+PASS: no change to the five layer layouts, encoder mappings, combos, or tap dances.
+PASS: storage regression test compiles the actual patched upstream read/write
+      functions with Clang -Wall -Wextra -Werror. Invalid EEPROM is ignored;
+      full configuration and changed precision DPI survive simulated RAM loss.
+PASS: patch applies to a fresh checkout and repeated application is harmless.
+PASS: conflicting edits are rejected without overwriting them.
+PASS: only bastardkb/bk_pointing_device selected by mykeymap/keymap.json.
+PASS: the copied module and separate storage source/header have been removed.
 PASS: no Argos, raw-HID, or VIA symbols in the final ELF.
-PASS: no Argos headers in 189 compiler dependency files.
-PASS: UF2 block headers, block numbers, counts, end markers, and RP2040 family ID.
-PASS: bash -n build.sh.
+PASS: no Argos headers or local module paths in 188 compiler dependency files.
+PASS: RP2040 UF2 headers, block numbers, counts, family ID, and end markers.
+PASS: Bash syntax and Git whitespace checks.
 
 Artifact: bastardkb_charybdis_3x6_splinktegrated_rev1_mykeymap.uf2
 Size: 141824 bytes
-SHA256: 4436865715f5e48214b9431a3a0e3aaaa6f45121ab0d3e3704607d874532af25
+SHA256: 68c88ed28dd43e0d3fcecc76475a911f23adc97e6c9526212751a1066c6b4f95
 
-The original qmk_userspaceBU files were not modified. No firmware was flashed
-during validation.
-Physical keyboard behavior, including USB, split communication, trackball,
-encoder, RGB, and on-device EEPROM persistence, still needs hardware verification.
+The original qmk_userspaceBU files were not modified. No firmware was flashed.
+Physical USB, split communication, trackball, encoder, RGB, and on-device EEPROM
+persistence still need hardware verification.

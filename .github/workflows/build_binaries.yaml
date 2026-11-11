@@ -12,6 +12,9 @@ jobs:
     with:
       qmk_repo: bastardkb/bastardkb-qmk
       qmk_ref: bc50f889c80773e96bfcb1249f137b676cf0eb5f
+      preparation_command: |
+        bash apply-module-patches.sh
+        python3 scripts/test_pointing_storage.py
 
   publish:
     name: 'QMK Userspace Publish'

@@ -44,17 +44,26 @@ The diagram is generated from the C keymap and its five combos. Named layers and
 
 ## Pointing module and Argos exclusion
 
-The keymap selects only `local/bk_pointing_device`. Argos, VIA, and raw HID are not enabled in this build. The upstream submodule still contains unused vendor modules and example keymaps; these are not compiled into this target.
+The keymap selects only `bastardkb/bk_pointing_device`, provided by the upstream Git submodule at `modules/bastardkb`. Argos, VIA, and raw HID remain disabled. No module source files or headers are copied into this userspace.
 
-The local pointing module is copied from BastardKB qmk_modules commit `309202383aca26a62b0f5670c51833a59206d146`. Its GPL license and copyright headers are retained. Local changes:
+The submodule is pinned to `309202383aca26a62b0f5670c51833a59206d146`. One patch, `patches/pointing-no-argos.patch`, contains the fixes for that revision. It changes three upstream C files: `bk_pointing_device.c`, `bk_pointing_modes.c`, and `bk_pointing_rgb.c` (28 added lines and 18 removed lines). The changes cover:
 
-- Remove an unconditional Argos RGB header include and guard Argos-only device-information code.
-- Store the complete pointing configuration in QMK's versioned 256-byte user EEPROM block, with a compile-time size check. Upstream's non-Argos path stores only its first byte.
-- Avoid resetting user EEPROM at each startup and avoid duplicate calls to QMK user hooks.
-- Allow the keymap to set legacy DPI minima, increments, and ranges and initialize them at the minimum step.
-- Retain legacy normal-DPI key behavior instead of adjusting whichever pointing mode is active.
+- Guard Argos-only headers and device-information code.
+- Store the complete pointing configuration in QMK's versioned 256-byte user EEPROM block, with a compile-time size check.
+- Avoid duplicate user-hook calls and the module's startup user-EEPROM initialization call.
+- Honor the keymap's legacy DPI defaults and ranges and keep normal-DPI controls independent of the active pointing mode.
 
-Keep the local module when moving this userspace. Updating the upstream submodule does not update this local copy; review its fixes before replacing it.
+`build.sh` initializes the submodule if needed and applies the patch before compiling. GitHub Actions applies the same patch through QMK's `preparation_command`. Applying it again is harmless; a different upstream revision or conflicting changes stop the build with an explanation.
+
+If compiling directly instead of using `build.sh`, prepare the userspace first:
+
+```sh
+git submodule update --init --recursive
+./apply-module-patches.sh
+qmk compile -c -kb bastardkb/charybdis/3x6/splinktegrated_rev1 -km mykeymap
+```
+
+After a build, Git reports the submodule as modified because the patch is applied to its working files. Its committed revision stays pinned; the maintained changes live in the patch. Before upgrading the submodule, review which fixes upstream has incorporated and reduce or remove the patch accordingly.
 
 ## Flash and hardware verification
 
@@ -66,12 +75,8 @@ After flashing, check typing and home-row holds, combos/tap dances, the encoder 
 
 The RP2040 UF2 compiles and links successfully. Source comparisons preserve all five layouts, encoder mappings, combos, and tap dances except the documented names. The final ELF and compiler dependencies contain no Argos code or headers, and no VIA or raw-HID symbols. See `validation.txt` for the firmware hash and validation limits.
 
-The host regression test uses the actual EEPROM storage source with a mock EEPROM API; it verifies invalid-storage handling and complete configuration save/reload. Run it from this userspace root:
+The host regression test compiles the EEPROM read/write function bodies extracted from the patched upstream source, using a mock EEPROM API. It verifies invalid-storage handling and complete configuration save/reload without maintaining a duplicate storage implementation:
 
 ```sh
-clang -std=c11 -Wall -Wextra -Werror '-DQMK_KEYBOARD_H="fake_qmk.h"' \
-  -I tests/pointing_storage -I modules/local/bk_pointing_device \
-  tests/pointing_storage/test.c modules/local/bk_pointing_device/bk_pointing_storage.c \
-  -o /tmp/charybdis-pointing-storage-test
-/tmp/charybdis-pointing-storage-test
+python3 scripts/test_pointing_storage.py
 ```

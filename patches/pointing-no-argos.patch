@@ -1,0 +1,152 @@
+--- a/bk_pointing_device/bk_pointing_device.c
++++ b/bk_pointing_device/bk_pointing_device.c
+@@ -63,7 +63,10 @@
+ #if defined(BK_HAS_POINTING_DEVICE) && defined(COMMUNITY_MODULE_ARGOS_ENABLE)
+     argos_read_eeprom(ARGOS_OFFSET_POINTER_CONFIG, &g_bkpd_config, sizeof(bkpd_config_t));
+ #else
+-    g_bkpd_config.raw = eeconfig_read_kb() & 0xff;
++    STATIC_ASSERT(sizeof(bkpd_config_t) <= EECONFIG_USER_DATA_SIZE, "Pointing settings exceed user EEPROM");
++    if (eeconfig_is_user_datablock_valid()) {
++        eeconfig_read_user_datablock(&g_bkpd_config, 0, sizeof(g_bkpd_config));
++    }
+ #endif
+ }
+ 
+@@ -80,7 +83,7 @@
+ #if defined(BK_HAS_POINTING_DEVICE) && defined(COMMUNITY_MODULE_ARGOS_ENABLE)
+     argos_write_eeprom(ARGOS_OFFSET_POINTER_CONFIG, &g_bkpd_config, sizeof(bkpd_config_t));
+ #else
+-    eeconfig_update_kb(g_bkpd_config.raw);
++    eeconfig_update_user_datablock(&g_bkpd_config, 0, sizeof(g_bkpd_config));
+ #endif
+ }
+ 
+@@ -162,6 +165,7 @@
+     return true; // always ack command
+ }
+ 
++#ifdef COMMUNITY_MODULE_ARGOS_ENABLE
+ void bkpd_build_pointing_device_info_command_data(uint8_t *command_data) {
+     command_data[0] = pointing_device_type_unknown;
+ #ifdef BK_HAS_POINTING_DEVICE
+@@ -223,6 +227,8 @@
+ #endif
+ }
+ 
++#endif // COMMUNITY_MODULE_ARGOS_ENABLE
++
+ void bkpd_set_auto_mouse_layer_enabled(bool enabled) {
+     g_bkpd_config.auto_mouse_layer_enabled = enabled;
+     set_auto_mouse_enable(enabled);
+@@ -249,7 +255,6 @@
+     if (is_keyboard_master()) {
+ #ifndef POINTING_DEVICE_DRIVER_digitizer
+         mouse_report = bkpd_process_active_mode(mouse_report);
+-        mouse_report = pointing_device_task_user(mouse_report);
+ #endif
+     }
+     return mouse_report;
+@@ -271,10 +276,6 @@
+  * \brief Process keycodes related to the pointing device.
+  */
+ bool process_record_bk_pointing_device(uint16_t keycode, keyrecord_t *record) {
+-    if (!process_record_user(keycode, record)) {
+-        return false;
+-    }
+-
+     // try to process trigger/toggle mode keycodes first
+     uint8_t mode = bkpd_mode_from_keycode(keycode);
+     if(mode < MODE_LAST) {
+@@ -307,15 +308,15 @@
+             if (record->event.pressed) {
+                 // DPI change for all modes
+                 // Step backward if shifted, forward otherwise.
+-                changing_dpi_settings_for_mode = bkpd_mode_get_active_id();
+-                bkpd_mode_current_cycle_dpi(/* forward= */ !has_shift_mod());
++                changing_dpi_settings_for_mode = MODE_NORMAL;
++                bkpd_mode_cycle_dpi(MODE_NORMAL, /* forward= */ !has_shift_mod());
+             }
+             break;
+         case DPI_RMOD:
+             if (record->event.pressed) {
+                 // Step forward if shifted, backward otherwise.
+-                changing_dpi_settings_for_mode = bkpd_mode_get_active_id();
+-                bkpd_mode_current_cycle_dpi(/* forward= */ has_shift_mod());
++                changing_dpi_settings_for_mode = MODE_NORMAL;
++                bkpd_mode_cycle_dpi(MODE_NORMAL, /* forward= */ has_shift_mod());
+             }
+             break;
+         case S_D_MOD: // legacy
+@@ -373,11 +374,6 @@
+  */
+ void keyboard_post_init_bk_pointing_device(void) {
+     read_bkpd_config_from_eeprom();
+-    // TODO: replace with per-module memory management
+-#ifdef COMMUNITY_MODULE_ARGOS_ENABLE
+-#else
+-    eeconfig_init_user();
+-#endif
+     set_auto_mouse_layer(AUTO_MOUSE_DEFAULT_LAYER);
+     if (g_bkpd_config.auto_mouse_layer_enabled) {
+         set_auto_mouse_enable(true);
+--- a/bk_pointing_device/bk_pointing_modes.c
++++ b/bk_pointing_device/bk_pointing_modes.c
+@@ -38,17 +38,29 @@
+ #    include "argos.h"
+ #endif
+ 
++#ifndef BK_POINTING_DEVICE_MINIMUM_DEFAULT_DPI
+ #define BK_POINTING_DEVICE_MINIMUM_DEFAULT_DPI 100
++#endif
++#ifndef BK_POINTING_DEVICE_DEFAULT_DPI_CONFIG_STEP
+ #define BK_POINTING_DEVICE_DEFAULT_DPI_CONFIG_STEP 100
++#endif
++#ifndef BK_POINTING_DEVICE_MINIMUM_SNIPING_DPI
+ #define BK_POINTING_DEVICE_MINIMUM_SNIPING_DPI 100
++#endif
++#ifndef BK_POINTING_DEVICE_SNIPING_DPI_CONFIG_STEP
+ #define BK_POINTING_DEVICE_SNIPING_DPI_CONFIG_STEP 100
++#endif
+ // etc etc
+ 
+ #define BK_POINTING_DEVICE_NORMAL_DEFAULT_STEP 3
+ // etc etc
+ 
++#ifndef BK_POINTING_DEVICE_DPI_STEPS
+ #define BK_POINTING_DEVICE_DPI_STEPS 30
++#endif
++#ifndef BK_POINTING_DEVICE_SNIPING_DPI_STEPS
+ #define BK_POINTING_DEVICE_SNIPING_DPI_STEPS 20
++#endif
+ 
+ extern bkpd_config_t g_bkpd_config;
+ extern int8_t changing_dpi_settings_for_mode;
+@@ -95,14 +107,14 @@
+         g_bkpd_config.modes_config[i].minimum_dpi     = BK_POINTING_DEVICE_MINIMUM_SNIPING_DPI;
+         
+         // set default step to a big higher than minimum
+-        g_bkpd_config.modes_config[i].current_dpi_step = 4;
++        g_bkpd_config.modes_config[i].current_dpi_step = 0;
+     }
+ 
+     // edit specific values
+     g_bkpd_config.modes_config[MODE_NORMAL].max_dpi_steps     = BK_POINTING_DEVICE_DPI_STEPS;
+     g_bkpd_config.modes_config[MODE_NORMAL].dpi_per_step     = BK_POINTING_DEVICE_DEFAULT_DPI_CONFIG_STEP;
+     g_bkpd_config.modes_config[MODE_NORMAL].minimum_dpi     = BK_POINTING_DEVICE_MINIMUM_DEFAULT_DPI;
+-    g_bkpd_config.modes_config[MODE_NORMAL].current_dpi_step = 6;
++    g_bkpd_config.modes_config[MODE_NORMAL].current_dpi_step = 0;
+ }
+ 
+ void bkpd_mode_set_activate_on_layer(uint8_t mode_id, uint8_t activate_on_layer) {
+--- a/bk_pointing_device/bk_pointing_rgb.c
++++ b/bk_pointing_device/bk_pointing_rgb.c
+@@ -19,7 +19,9 @@
+ 
+  #include "bk_pointing_rgb.h"
+  #include "bk_pointing_device.h"
++#ifdef COMMUNITY_MODULE_ARGOS_ENABLE
+  #include "argos_rgb.h"
++#endif
+ 
+  extern int8_t changing_dpi_settings_for_mode;
+  extern bkpd_config_t g_bkpd_config;
