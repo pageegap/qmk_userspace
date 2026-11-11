@@ -1,0 +1,55 @@
+draw_config:
+  key_w: 62
+  key_h: 58
+  split_gap: 35
+  combo_w: 48
+  combo_h: 22
+  footer_text: "Charybdis Mini · mykeymap · Hold legends below; tap-dance double-tap above"
+parse_config:
+  raw_binding_map:
+    LCMD_T(KC_A): {t: A, h: Cmd}
+    LOPT_T(KC_S): {t: S, h: Option}
+    CTL_T(KC_D): {t: D, h: Ctrl}
+    LSFT_T(KC_F): {t: F, h: Shift}
+    LSFT_T(KC_J): {t: J, h: Shift}
+    RCTL_T(KC_K): {t: K, h: Ctrl}
+    ROPT_T(KC_L): {t: L, h: Option}
+    RCMD_T(KC_SCLN): {t: ";", h: Cmd}
+    RSFT_T(KC_SPC): {t: Space, h: Shift}
+    TD(TD_SHOW_SCREEN): {t: Mission Ctrl, s: "2× Maximize"}
+    TD(TD_CONFIG): {t: Enter, s: "2× Config"}
+    MS_BTN1: Mouse 1
+    MS_BTN2: Mouse 2
+    MS_BTN4: Mouse 4
+    MS_BTN5: Mouse 5
+    DRGSCRL: {t: Scroll, h: hold}
+    SNIPING: {t: Precision, h: hold}
+    DPI_MOD: DPI +
+    DPI_RMOD: DPI -
+    S_D_MOD: Snipe DPI +
+    S_D_RMOD: Snipe DPI -
+    NEWLINE: Newline
+    RM_NEXT: RGB next
+    RM_TOGG: RGB toggle
+    RM_VALU: RGB brighter
+    RM_VALD: RGB dimmer
+    EE_CLR: Reset EEPROM
+    QK_BOOT: Bootloader
+  qmk_keycode_map:
+    MS_BTN1: Mouse 1
+    MS_BTN2: Mouse 2
+    MS_BTN4: Mouse 4
+    MS_BTN5: Mouse 5
+    CAPS: Caps Lock
+    ENT: Enter
+    BSPC: Backspace
+    LSFT: Shift
+    RSFT: Shift
+    LGUI: Cmd
+    MUTE: Mute
+    VOLU: Volume +
+    VOLD: Volume -
+    LEFT: "←"
+    RGHT: "→"
+    UP: "↑"
+    DOWN: "↓"

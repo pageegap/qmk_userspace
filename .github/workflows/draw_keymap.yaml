@@ -1,0 +1,62 @@
+name: Draw keymap
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'keyboards/bastardkb/charybdis/3x6/keymaps/mykeymap/**'
+      - 'keymap-drawer/**'
+      - 'scripts/draw_keymap.py'
+      - 'tests/test_draw_keymap.py'
+      - 'draw-keymap.sh'
+      - '.github/workflows/draw_keymap.yaml'
+  pull_request:
+    paths:
+      - 'keyboards/bastardkb/charybdis/3x6/keymaps/mykeymap/**'
+      - 'keymap-drawer/**'
+      - 'scripts/draw_keymap.py'
+      - 'tests/test_draw_keymap.py'
+      - 'draw-keymap.sh'
+      - '.github/workflows/draw_keymap.yaml'
+
+permissions:
+  contents: read
+
+jobs:
+  draw:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out userspace
+        uses: actions/checkout@v4
+        with:
+          path: userspace
+      - name: Check out the validated firmware layout
+        uses: actions/checkout@v4
+        with:
+          repository: bastardkb/bastardkb-qmk
+          ref: bc50f889c80773e96bfcb1249f137b676cf0eb5f
+          path: firmware
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install drawing and QMK export dependencies
+        run: python -m pip install qmk==1.2.0 -r firmware/requirements.txt -r userspace/keymap-drawer/requirements.txt
+      - name: Generate the keymap diagram
+        env:
+          QMK_HOME: ${{ github.workspace }}/firmware
+          QMK_USERSPACE: ${{ github.workspace }}/userspace
+        run: python userspace/scripts/draw_keymap.py
+      - name: Test source extraction
+        working-directory: userspace
+        run: python -m unittest discover -s tests -p test_draw_keymap.py
+      - name: Upload diagram and editable YAML
+        uses: actions/upload-artifact@v4
+        with:
+          name: charybdis-mini-keymap
+          path: |
+            userspace/keymap-drawer/mykeymap.svg
+            userspace/keymap-drawer/mykeymap.yaml
+            userspace/keymap-drawer/layout.json
+      - name: Verify the committed preview is current
+        working-directory: userspace
+        run: git diff --exit-code -- keymap-drawer/mykeymap.svg keymap-drawer/mykeymap.yaml keymap-drawer/layout.json

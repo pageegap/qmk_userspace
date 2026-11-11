@@ -15,6 +15,22 @@ cd ~/Downloads/qmk_userspace-no-argos
 
 The UF2 is copied to this userspace directory. To use another QMK checkout, set `QMK_HOME` when running the script. For another machine, install QMK's build dependencies, clone the pinned firmware and its submodules, and configure this directory as QMK userspace. GitHub Actions is configured for this one target; pushing this userspace triggers the firmware build workflow.
 
+## Keymap diagram
+
+![Charybdis Mini keymap](keymap-drawer/mykeymap.svg)
+
+Regenerate the diagram after editing `keymap.c`:
+
+```sh
+./draw-keymap.sh
+```
+
+The prepared QMK environment includes keymap-drawer. On another machine, install `keymap-drawer/requirements.txt` into your QMK Python environment and set `QMK_HOME` to the firmware checkout. Drawing does not require the Arm compiler or a firmware build.
+
+The diagram is generated from the C keymap and its five combos. Named layers and custom legends are preserved, including home-row modifiers, trackball modes, DPI controls, and the Mission Control/Maximize tap dance. Combo markers are shown on Base; their actual scope follows QMK's combo handling. Encoder actions remain listed in `keymap.c` and are not shown in the key diagram.
+
+`keymap-drawer/config.yaml` controls legends and appearance; `annotations.yaml` labels combo actions. Generated YAML and the local physical layout JSON are saved alongside the SVG. The drawing workflow generates downloadable artifacts and checks that the committed preview matches the current keymap. Run the drawing command and commit its outputs along with keymap edits.
+
 ## Preserved behavior
 
 - Five layers, all home-row modifiers and layer taps, five combos, both tap-dance definitions, and the NEWLINE macro.

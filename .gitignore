@@ -9,3 +9,7 @@
 *.hex
 *.bin
 *.uf2
+
+# Python drawing tools
+__pycache__/
+*.pyc
