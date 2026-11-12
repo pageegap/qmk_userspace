@@ -27,7 +27,7 @@ Regenerate the diagram after editing `keymap.c`:
 
 The prepared QMK environment includes keymap-drawer. On another machine, install `keymap-drawer/requirements.txt` into your QMK Python environment and set `QMK_HOME` to the firmware checkout. Drawing does not require the Arm compiler or a firmware build.
 
-The diagram is generated from the C keymap and its five combos. Named layers and custom legends are preserved, including home-row modifiers, trackball modes, DPI controls, and the Mission Control/Maximize tap dance. Combo markers are shown on Base; their actual scope follows QMK's combo handling. Encoder actions remain listed in `keymap.c` and are not shown in the key diagram.
+The diagram is generated from the C keymap and its combo definitions. Named layers and custom legends are preserved, including home-row modifiers, trackball modes, DPI controls, and the Mission Control/Maximize tap dance. Base combos are shown on Base; combos using keys explicitly assigned to other layers are shown on those layers. Their actual activation follows QMK's combo handling. Encoder actions remain listed in `keymap.c` and are not shown in the key diagram.
 
 `keymap-drawer/config.yaml` controls legends and appearance; `annotations.yaml` labels combo actions. Generated YAML and the local physical layout JSON are saved alongside the SVG. The drawing workflow generates downloadable artifacts and checks that the committed preview matches the current keymap. Run the drawing command and commit its outputs along with keymap edits.
 

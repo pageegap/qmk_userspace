@@ -50,7 +50,7 @@ def layer_names(source):
     return result
 
 
-def extract_combos(source, base_keys, labels):
+def extract_combos(source, base_keys, labels, layers=None):
     arrays = dict(re.findall(
         r"const uint16_t PROGMEM (\w+)\[\]\s*=\s*\{([^}]+)\}", source
     ))
@@ -59,19 +59,32 @@ def extract_combos(source, base_keys, labels):
         raise ValueError("Cannot find key_combos; update the diagram exporter if its declaration changed")
     combos = []
     for entry in split_args(match[1]):
-        if not entry.startswith("COMBO(") or not entry.endswith(")"):
+        initializer = re.fullmatch(
+            r"(?:\[[^\[\]]+\]\s*=\s*)?COMBO\s*\((.*)\)", entry, re.S
+        )
+        if not initializer:
             raise ValueError(f"Unsupported combo declaration: {entry}")
-        name, action = split_args(entry[6:-1])
+        name, action = split_args(initializer[1])
         keys = split_args(arrays[name])
         if keys.pop() != "COMBO_END":
             raise ValueError(f"Missing COMBO_END for {name}")
-        positions = []
-        for key in keys:
-            if base_keys.count(key) != 1:
-                raise ValueError(f"Combo key {key} must occur once on Base")
-            positions.append(base_keys.index(key))
+        keys = [re.sub(r"\s+", "", key) for key in keys]
+        candidates = {"Base": base_keys, **(layers or {})}
+        matches = {}
+        for layer, bindings in candidates.items():
+            if all(bindings.count(key) == 1 for key in keys):
+                positions = tuple(bindings.index(key) for key in keys)
+                matches.setdefault(positions, []).append(layer)
+                # Show Base combos once; other layers may inherit them through transparency.
+                if layer == "Base":
+                    break
+        if not matches:
+            raise ValueError(
+                f"Combo {name} needs unique trigger keys together in a layer: {', '.join(keys)}"
+            )
         action = re.sub(r"\s+", "", action)
-        combos.append({"p": positions, "k": labels.get(action, action), "l": ["Base"]})
+        for positions, combo_layers in matches.items():
+            combos.append({"p": list(positions), "k": labels.get(action, action), "l": combo_layers})
     return combos
 
 
@@ -106,7 +119,10 @@ def main():
     if any(len(layer) != count for layer in exported["layers"]):
         raise ValueError("Layer key counts do not match the physical layout")
     annotations = yaml.safe_load((OUTPUT / "annotations.yaml").read_text())
-    combos = extract_combos(source, exported["layers"][0], annotations["combo_labels"])
+    combos = extract_combos(
+        source, exported["layers"][0], annotations["combo_labels"],
+        dict(zip(titles, exported["layers"])),
+    )
     with tempfile.TemporaryDirectory(prefix="charybdis-keymap-") as temporary:
         qmk_json = Path(temporary) / "keymap.json"
         qmk_json.write_text(json.dumps(exported))

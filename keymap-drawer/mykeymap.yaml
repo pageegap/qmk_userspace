@@ -53,11 +53,11 @@ layers:
   - t: Mouse 1
     h: Pointer
   - Backspace
-  - t: Mission Ctrl
-    s: 2× Maximize
+  - t: Backspace
+    h: Lower
   - DEL
-  - t: Space
-    h: Shift
+  - t: SPC
+    h: Config
   Lower:
   - t: ▽
     type: trans
@@ -274,10 +274,8 @@ layers:
     type: trans
   - t: ▽
     type: trans
-  - t: ▽
-    type: trans
-  - t: ▽
-    type: trans
+  - A
+  - B
   - t: ▽
     type: trans
   - t: ▽
@@ -330,6 +328,12 @@ combos:
 - p:
   - 27
   - 28
-  k: Backspace
+  k: Ctrl+↑
   l:
   - Base
+- p:
+  - 27
+  - 28
+  k: Cmd+↑
+  l:
+  - Config

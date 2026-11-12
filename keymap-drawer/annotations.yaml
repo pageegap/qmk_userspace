@@ -5,3 +5,5 @@ combo_labels:
   KC_ESC: Esc
   KC_ENT: Enter
   KC_BSPC: Backspace
+  LCTL(KC_UP): Ctrl+↑
+  LGUI(KC_UP): Cmd+↑
