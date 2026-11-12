@@ -46,8 +46,7 @@ static uint16_t auto_pointer_layer_timer = 0;
 #define RAISE MO(LAYER_RAISE)
 #define PT_Z LT(LAYER_POINTER, KC_Z)
 #define PT_SLSH LT(LAYER_POINTER, KC_SLSH)
-//#define DPI_MOD POINTER_DEFAULT_DPI_FORWARD
-//#define DPI_RMOD POINTER_DEFAULT_DPI_REVERSE
+
 
 
 // my modifications
@@ -87,25 +86,41 @@ enum {
     TD_CONFIG,
 };
 
-const uint16_t PROGMEM lockscr_combo[] = {KC_T, KC_Y, COMBO_END};
-const uint16_t PROGMEM printscreen[] = { KC_G, KC_H, COMBO_END};
-const uint16_t PROGMEM esc_combo[] = {KC_U, KC_I, COMBO_END};
-const uint16_t PROGMEM ent_combo[] = {KC_M, KC_COMM, COMBO_END};
-const uint16_t PROGMEM ent_combo2[] = {KC_C, KC_V, COMBO_END};
-
-combo_t key_combos[] = {
-    COMBO(lockscr_combo, LCTL(LGUI(KC_Q))),
-    COMBO(printscreen, SCMD(KC_5)),
-    COMBO(esc_combo, KC_ESC),
-    COMBO(ent_combo, KC_ENT),
-    COMBO(ent_combo2, KC_BSPC)
-};
-
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
     [TD_SHOW_SCREEN] = ACTION_TAP_DANCE_DOUBLE(LCTL(KC_UP), LGUI(KC_UP)),
     [TD_CONFIG] = ACTION_TAP_DANCE_DOUBLE(KC_ENT, TO(LAYER_CONFIG)),
 };
+
+// Combos
+enum combo_events {
+    LOCKSCR_COMBO,
+    PRINTSCREEN,
+    ESC_COMBO,
+    ENT_COMBO,
+    SHOWSCREEN_COMBO,
+    APPS_COMBO
+};
+
+const uint16_t PROGMEM lockscr_combo[] = {KC_T, KC_Y, COMBO_END};
+const uint16_t PROGMEM printscreen[] = { KC_G, KC_H, COMBO_END};
+const uint16_t PROGMEM esc_combo[] = {KC_U, KC_I, COMBO_END};
+const uint16_t PROGMEM ent_combo[] = {KC_M, KC_COMM, COMBO_END};
+const uint16_t PROGMEM showscreen_combo[] = {KC_C, KC_V, COMBO_END};
+const uint16_t PROGMEM apps_combo[] = {KC_A, KC_B, COMBO_END};
+
+
+
+combo_t key_combos[] = {
+    [LOCKSCR_COMBO] = COMBO(lockscr_combo, LCTL(LGUI(KC_Q))),
+    [PRINTSCREEN] = COMBO(printscreen, SCMD(KC_5)),
+    [ESC_COMBO] = COMBO(esc_combo, KC_ESC),
+    [ENT_COMBO] = COMBO(ent_combo, KC_ENT),
+    [SHOWSCREEN_COMBO] = COMBO(showscreen_combo, LCTL(KC_UP)),
+    [APPS_COMBO] = COMBO(apps_combo, LGUI(KC_UP)),
+};
+
+
 
 
 // clang-format off
@@ -118,7 +133,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LSFT, LT(LAYER_LOWER, KC_Z), KC_X, KC_C, KC_V, KC_B,                     KC_N,KC_M,  KC_COMM, KC_DOT,  LT(LAYER_RAISE, KC_SLSH), KC_RSFT,
      //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-     LT(LAYER_POINTER, MS_BTN1), KC_BSPC ,TD(TD_SHOW_SCREEN) ,                 KC_DEL, RSFT_T(KC_SPC)
+     LT(LAYER_POINTER, MS_BTN1), KC_BSPC ,LT(LAYER_LOWER,KC_BSPC) ,                 KC_DEL, LT(LAYER_CONFIG,KC_SPC)
      //                             `--------------------------'                   `--------------------------'
   ),
 
@@ -134,7 +149,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //`--------------------------'  `--------------------------'
 
   ),
-
+ 
   [LAYER_RAISE] = LAYOUT(
      //,-----------------------------------------------------.                    ,-----------------------------------------------------.
          _______, KC_QUOT, KC_PERCENT, RSFT(KC_LBRC), RSFT(KC_RBRC), KC_HASH,          KC_PIPE, KC_AMPR, KC_ASTR, KC_GRV, _______, _______,
@@ -165,7 +180,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
        DPI_MOD, DPI_RMOD, _______,  _______, _______ ,  _______                      , S_D_MOD, S_D_RMOD, _______,  _______,  S_D_MOD, S_D_RMOD,
        //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       _______,  _______, _______, _______ , _______, _______,                        _______,  _______, _______, _______,_______, _______,
+       _______,  _______, _______, KC_A, KC_B, _______,                        _______,  _______, _______, _______,_______, _______,
        //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
        _______, _______, _______,         _______ , _______
        //`--------------------------'  `--------------------------'
@@ -223,29 +238,35 @@ void rgb_matrix_update_pwm_buffers(void);
 // my RGB effects
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    if (host_keyboard_led_state().caps_lock) {
-        for (uint8_t i = led_min; i < led_max; i++) {
-            rgb_matrix_set_color(i, RGB_RED);
-        }
-    } else {
-        for (uint8_t i = led_min; i < led_max; i++) {
-            switch(get_highest_layer(layer_state|default_layer_state)) {
-                case 3:
+    uint8_t layer = get_highest_layer(layer_state | default_layer_state);
+    bool caps_lock = host_keyboard_led_state().caps_lock;
+
+    for (uint8_t i = led_min; i < led_max; i++) {
+        if (i == 0) {
+            if (caps_lock) {
+                rgb_matrix_set_color(i, RGB_RED);
+            } else if (layer == 1) {
+                rgb_matrix_set_color(i, RGB_GREEN);
+            } else if (layer == 2) {
+                rgb_matrix_set_color(i, RGB_CYAN);
+            } else if (layer == 3) {
                 rgb_matrix_set_color(i, RGB_PURPLE);
-                break;
-                case 2:
-                    rgb_matrix_set_color(i, RGB_CYAN);
-                    break;
-                case 1:
-                    rgb_matrix_set_color(i, RGB_GREEN);
-                    break;
-                default:
-                    break;
+            } else if (layer == 4) {
+                rgb_matrix_set_color(i, RGB_ORANGE);
             }
         }
     }
     return false;
 }
+
+bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
+    switch (combo_index) {
+        case APPS_COMBO:
+            return layer_state_is(LAYER_CONFIG);
+    }
+    return true; // Allow all other combos on any layer
+}
+
 
 void keyboard_post_init_user(void) {
     bkpd_set_auto_mouse_layer_enabled(false);
