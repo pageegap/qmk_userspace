@@ -14,8 +14,7 @@ layers:
   - I
   - O
   - P
-  - t: Enter
-    h: Config
+  - Enter
   - Backspace
   - t: A
     h: Cmd
@@ -52,9 +51,9 @@ layers:
   - Shift
   - t: Mouse 1
     h: Pointer
+  - t: Config
+    h: toggle
   - Backspace
-  - t: Backspace
-    h: Lower
   - DEL
   - t: SPC
     h: Config
@@ -249,7 +248,8 @@ layers:
     type: trans
   - t: ▽
     type: trans
-  - type: held
+  - t: ▽
+    type: trans
   - DPI +
   - DPI -
   - t: ▽
@@ -298,8 +298,7 @@ layers:
     type: trans
   - t: ▽
     type: trans
-  - t: ▽
-    type: trans
+  - type: held
 combos:
 - p:
   - 5
@@ -322,6 +321,12 @@ combos:
 - p:
   - 31
   - 32
+  k: Enter
+  l:
+  - Base
+- p:
+  - 19
+  - 20
   k: Enter
   l:
   - Base
