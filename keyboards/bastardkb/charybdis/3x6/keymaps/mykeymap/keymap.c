@@ -98,6 +98,7 @@ enum combo_events {
     PRINTSCREEN,
     ESC_COMBO,
     ENT_COMBO,
+    ENT2_COMBO,
     SHOWSCREEN_COMBO,
     APPS_COMBO
 };
@@ -106,6 +107,7 @@ const uint16_t PROGMEM lockscr_combo[] = {KC_T, KC_Y, COMBO_END};
 const uint16_t PROGMEM printscreen[] = { KC_G, KC_H, COMBO_END};
 const uint16_t PROGMEM esc_combo[] = {KC_U, KC_I, COMBO_END};
 const uint16_t PROGMEM ent_combo[] = {KC_M, KC_COMM, COMBO_END};
+const uint16_t PROGMEM ent2_combo[] = {LSFT_T(KC_J), RCTL_T(KC_K), COMBO_END};
 const uint16_t PROGMEM showscreen_combo[] = {KC_C, KC_V, COMBO_END};
 const uint16_t PROGMEM apps_combo[] = {KC_A, KC_B, COMBO_END};
 
@@ -116,6 +118,7 @@ combo_t key_combos[] = {
     [PRINTSCREEN] = COMBO(printscreen, SCMD(KC_5)),
     [ESC_COMBO] = COMBO(esc_combo, KC_ESC),
     [ENT_COMBO] = COMBO(ent_combo, KC_ENT),
+    [ENT2_COMBO] = COMBO(ent2_combo, KC_ENT),
     [SHOWSCREEN_COMBO] = COMBO(showscreen_combo, LCTL(KC_UP)),
     [APPS_COMBO] = COMBO(apps_combo, LGUI(KC_UP)),
 };
@@ -127,15 +130,15 @@ combo_t key_combos[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
      //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-          KC_CAPS,   KC_Q,   KC_W,   KC_E,     KC_R,    KC_T,                        KC_Y,   KC_U,    KC_I,    KC_O,  KC_P,  LT(LAYER_CONFIG, KC_ENT),
+          KC_CAPS,   KC_Q,   KC_W,   KC_E,     KC_R,    KC_T,                        KC_Y,   KC_U,    KC_I,    KC_O,  KC_P,  KC_ENT,
      //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
         KC_BSPC, LCMD_T(KC_A), LOPT_T(KC_S), CTL_T(KC_D), LSFT_T(KC_F), KC_G,        KC_H, LSFT_T(KC_J), RCTL_T(KC_K),ROPT_T(KC_L),RCMD_T(KC_SCLN), KC_QUOT,
      //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LSFT, LT(LAYER_LOWER, KC_Z), KC_X, KC_C, KC_V, KC_B,                     KC_N,KC_M,  KC_COMM, KC_DOT,  LT(LAYER_RAISE, KC_SLSH), KC_RSFT,
      //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-     LT(LAYER_POINTER, MS_BTN1), KC_BSPC ,LT(LAYER_LOWER,KC_BSPC) ,                 KC_DEL, LT(LAYER_CONFIG,KC_SPC)
+     LT(LAYER_POINTER, MS_BTN1), TG(LAYER_CONFIG) , KC_BSPC,                 KC_DEL, LT(LAYER_CONFIG,KC_SPC)
      //                             `--------------------------'                   `--------------------------'
-  ),
+  ), 
 
   [LAYER_LOWER] = LAYOUT(
 //,-----------------------------------------------------.                    ,-----------------------------------------------------.
