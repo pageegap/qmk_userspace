@@ -106,9 +106,9 @@ enum combo_events {
 const uint16_t PROGMEM lockscr_combo[] = {KC_T, KC_Y, COMBO_END};
 const uint16_t PROGMEM printscreen[] = { KC_G, KC_H, COMBO_END};
 const uint16_t PROGMEM esc_combo[] = {KC_U, KC_I, COMBO_END};
-const uint16_t PROGMEM ent_combo[] = {KC_M, KC_COMM, COMBO_END};
+const uint16_t PROGMEM ent_combo[] = {KC_C, KC_V, COMBO_END};
 const uint16_t PROGMEM ent2_combo[] = {LSFT_T(KC_J), RCTL_T(KC_K), COMBO_END};
-const uint16_t PROGMEM showscreen_combo[] = {KC_C, KC_V, COMBO_END};
+const uint16_t PROGMEM showscreen_combo[] = {KC_M, KC_COMM, COMBO_END};
 const uint16_t PROGMEM apps_combo[] = {KC_A, KC_B, COMBO_END};
 
 
@@ -117,7 +117,7 @@ combo_t key_combos[] = {
     [LOCKSCR_COMBO] = COMBO(lockscr_combo, LCTL(LGUI(KC_Q))),
     [PRINTSCREEN] = COMBO(printscreen, SCMD(KC_5)),
     [ESC_COMBO] = COMBO(esc_combo, KC_ESC),
-    [ENT_COMBO] = COMBO(ent_combo, KC_ENT),
+    [ENT_COMBO] = COMBO(ent_combo, LGUI(KC_UP)),
     [ENT2_COMBO] = COMBO(ent2_combo, KC_ENT),
     [SHOWSCREEN_COMBO] = COMBO(showscreen_combo, LCTL(KC_UP)),
     [APPS_COMBO] = COMBO(apps_combo, LGUI(KC_UP)),
