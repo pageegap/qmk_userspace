@@ -330,16 +330,16 @@ path.combo {
 <text x="754" y="29" class="combo tap">Esc</text>
 </g>
 <g class="combo combopos-3">
-<rect rx="6" ry="6" x="730" y="134" width="48" height="22" class="combo"/>
-<text x="754" y="145" class="combo tap">Enter</text>
+<rect rx="6" ry="6" x="208" y="134" width="48" height="22" class="combo"/>
+<text x="232" y="145" class="combo tap">Cmd+↑</text>
 </g>
 <g class="combo combopos-4">
 <rect rx="6" ry="6" x="730" y="76" width="48" height="22" class="combo"/>
 <text x="754" y="87" class="combo tap">Enter</text>
 </g>
 <g class="combo combopos-5">
-<rect rx="6" ry="6" x="208" y="134" width="48" height="22" class="combo"/>
-<text x="232" y="145" class="combo tap">Ctrl+↑</text>
+<rect rx="6" ry="6" x="730" y="134" width="48" height="22" class="combo"/>
+<text x="754" y="145" class="combo tap">Ctrl+↑</text>
 </g>
 </g>
 </g>

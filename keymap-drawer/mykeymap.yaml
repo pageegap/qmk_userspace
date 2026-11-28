@@ -319,9 +319,9 @@ combos:
   l:
   - Base
 - p:
-  - 31
-  - 32
-  k: Enter
+  - 27
+  - 28
+  k: Cmd+↑
   l:
   - Base
 - p:
@@ -331,8 +331,8 @@ combos:
   l:
   - Base
 - p:
-  - 27
-  - 28
+  - 31
+  - 32
   k: Ctrl+↑
   l:
   - Base
